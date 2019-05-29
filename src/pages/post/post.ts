@@ -31,7 +31,7 @@ export class PostPage {
 
   }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.morePagesAvailable = true;
     let loading = this.loadingCtrl.create();
 
@@ -51,106 +51,106 @@ export class PostPage {
       });
   }
 
-  getAuthorData(){
+  getAuthorData() {
     return this.wordpressService.getAuthor(this.post.author);
   }
 
-  getCategories(){
+  getCategories() {
     return this.wordpressService.getPostCategories(this.post);
   }
 
-  getComments(){
+  getComments() {
     return this.wordpressService.getComments(this.post.id);
   }
 
   loadMoreComments(infiniteScroll) {
-    let page = (this.comments.length/10) + 1;
+    let page = (this.comments.length / 10) + 1;
     this.wordpressService.getComments(this.post.id, page)
-    .subscribe(data => {
-      for(let item of data){
-        this.comments.push(item);
-      }
-      infiniteScroll.complete();
-    }, err => {
-      console.log(err);
-      this.morePagesAvailable = false;
-    })
+      .subscribe(data => {
+        for (let item of data) {
+          this.comments.push(item);
+        }
+        infiniteScroll.complete();
+      }, err => {
+        console.log(err);
+        this.morePagesAvailable = false;
+      })
   }
 
-  goToCategoryPosts(categoryId, categoryTitle){
+  goToCategoryPosts(categoryId, categoryTitle) {
     this.navCtrl.push(HomePage, {
       id: categoryId,
       title: categoryTitle
     })
   }
 
-  createComment(){
+  createComment() {
     let user: any;
 
     this.authenticationService.getUser()
-    .then(res => {
-      user = res;
+      .then(res => {
+        user = res;
 
-      let alert = this.alertCtrl.create({
-      title: 'Add a comment',
-      inputs: [
-        {
-          name: 'comment',
-          placeholder: 'Comment'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Accept',
-          handler: data => {
-            let loading = this.loadingCtrl.create();
-            loading.present();
-            this.wordpressService.createComment(this.post.id, user, data.comment)
-            .subscribe(
-              (data) => {
-                console.log("ok", data);
-                this.getComments();
-                loading.dismiss();
-              },
-              (err) => {
-                console.log("err", err);
-                loading.dismiss();
+        let alert = this.alertCtrl.create({
+          title: 'Add a comment',
+          inputs: [
+            {
+              name: 'comment',
+              placeholder: 'Comment'
+            }
+          ],
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: data => {
+                console.log('Cancel clicked');
               }
-            );
-          }
-        }
-      ]
-    });
-    alert.present();
-    },
-    err => {
-      let alert = this.alertCtrl.create({
-        title: 'Please login',
-        message: 'You need to login in order to comment',
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            handler: () => {
-              console.log('Cancel clicked');
+            },
+            {
+              text: 'Accept',
+              handler: data => {
+                let loading = this.loadingCtrl.create();
+                loading.present();
+                this.wordpressService.createComment(this.post.id, user, data.comment)
+                  .subscribe(
+                    (data) => {
+                      console.log("ok", data);
+                      this.getComments();
+                      loading.dismiss();
+                    },
+                    (err) => {
+                      console.log("err", err);
+                      loading.dismiss();
+                    }
+                  );
+              }
             }
-          },
-          {
-            text: 'Login',
-            handler: () => {
-              this.navCtrl.push(LoginPage);
-            }
-          }
-        ]
-      });
-    alert.present();
-    });
+          ]
+        });
+        alert.present();
+      },
+        err => {
+          let alert = this.alertCtrl.create({
+            title: 'Faça Login!',
+            message: 'É necessário fazer login para se conectar, para adicionar um comentário!',
+            buttons: [
+              {
+                text: 'Cancelar',
+                role: 'cancel',
+                handler: () => {
+                  console.log('Cancel clicked');
+                }
+              },
+              {
+                text: 'Entrar',
+                handler: () => {
+                  this.navCtrl.push(LoginPage);
+                }
+              }
+            ]
+          });
+          alert.present();
+        });
   }
 }
