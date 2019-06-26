@@ -43,7 +43,7 @@ import { NativeStorage } from '@ionic-native/native-storage';
     NativeStorage,
     WordpressService,
     AuthenticationService,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
-export class AppModule {}
+export class AppModule { }

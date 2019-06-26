@@ -18,7 +18,7 @@ export class RegisterPage {
     public formBuilder: FormBuilder,
     public wordpressService: WordpressService,
     public authenticationService: AuthenticationService
-  ) {}
+  ) { }
 
   ionViewWillLoad() {
     this.register_form = this.formBuilder.group({
@@ -29,33 +29,33 @@ export class RegisterPage {
     });
   }
 
-  onSubmit(values){
-    var username: 'aa'; // this should be an administrator Username
-    var password: 'aa'; // this should be an administrator Password
+  onSubmit(values) {
+    var username: 'admin'; // this should be an administrator Username
+    var password: 'admin'; // this should be an administrator Password
     //only authenticated administrators can create users
     this.authenticationService.doLogin(username, password)
-    .subscribe(
-      res => {
-        let user_data = {
-          username: values.username,
-          name: values.displayName,
-          email: values.email,
-          password: values.password
-        };
-        this.authenticationService.doRegister(user_data, res.json().token)
-        .subscribe(
-          result => {
-            console.log(result);
-          },
-          error => {
-            console.log(error);
-          }
-        );
-      },
-      err => {
-        console.log(err);
-      }
-    )
+      .subscribe(
+        res => {
+          let user_data = {
+            username: values.username,
+            name: values.displayName,
+            email: values.email,
+            password: values.password
+          };
+          this.authenticationService.doRegister(user_data, res.json().token)
+            .subscribe(
+              result => {
+                console.log(result);
+              },
+              error => {
+                console.log(error);
+              }
+            );
+        },
+        err => {
+          console.log(err);
+        }
+      )
   }
 
 }

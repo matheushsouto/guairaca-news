@@ -133,7 +133,7 @@ export class PostPage {
         err => {
           let alert = this.alertCtrl.create({
             title: 'Faça Login!',
-            message: 'É necessário fazer login para se conectar, para adicionar um comentário!',
+            message: 'É necessário fazer login para se conectar, clique em "Entrar" para adicionar um comentário!',
             buttons: [
               {
                 text: 'Cancelar',
